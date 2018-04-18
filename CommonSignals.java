@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class CommonSignals {
@@ -95,26 +96,30 @@ public class CommonSignals {
 		return g;
 	}
 	
+	public static void printComplex(Complex[] cList) {
+		for(int i = 0; i < cList.length; i++){
+			System.out.println(cList[i]);
+		}
+	}
+	
 
 
 	
-	public static void main(String[] args) throws FileNotFoundException{
+	public static void main(String[] args) throws IOException{
+		//Question1
 		//fs(3);
 		//fs(10);
 		//fs(50);
 		//gs(3);
 		//gs(10);
-		//gs(50);
-		
+		//gs(50);		
 		
 		//FFT of f50
 		/*Matrix f50 = new Matrix (fs(50));
 		Complex[] f50_fft = f50.fft(1);	
 				
 		System.out.println("FFT of f50");
-		for(int i = 0; i < f50_fft.length; i++){
-			System.out.println(f50_fft[i]);
-		}
+		printComplex(f50_fft);
 		
 		//PSD of f50
 		System.out.println("-----------------------------------------");
@@ -129,9 +134,7 @@ public class CommonSignals {
 		Complex[] g50_fft = g50.fft(1);	
 				
 		System.out.println("FFT of g50");
-		for(int i = 0; i < g50_fft.length; i++){
-			System.out.println(g50_fft[i]);
-		}
+		printComplex(g50_fft);
 		
 		//PSD of f50
 		System.out.println("-----------------------------------------");
@@ -139,7 +142,7 @@ public class CommonSignals {
 		Matrix g50_psd = g50.psd();
 		System.out.println(g50_psd);*/
 		
-		Matrix fL = new Matrix (generate_FL(50));
+		/*Matrix fL = new Matrix (generate_FL(50));
 		System.out.println("Data of fL(50)");
 		System.out.println(fL);
 		
@@ -158,7 +161,32 @@ public class CommonSignals {
 		System.out.println("-----------------------------------------");
 		System.out.println("PSD of gL50");
 		Matrix gL50_psd = gL.psd();
-		System.out.println(gL50_psd);
+		System.out.println(gL50_psd);*/
+		
+		
+		
+		//Question2
+		/*System.out.println("Sum of 2 sin functions");
+		Matrix sinSum = new Matrix(1, "Resources/sinSum.txt");		
+		Matrix sinSum_matrix = new Matrix (sinSum);
+		Complex[] sinSum_fft = sinSum_matrix.fft(1);
+		printComplex(sinSum_fft);
+		System.out.println("-----------------------------------------");
+		System.out.println("PSD of sinSum");
+		Matrix sinSum_psd = sinSum_matrix.psd();
+		System.out.println(sinSum_psd);*/
+		
+		
+		System.out.println("Product of 2 sin functions");
+		Matrix sinProd = new Matrix(1, "Resources/sinProduct.txt");		
+		Matrix sinProd_matrix = new Matrix (sinProd);
+		Complex[] sinProd_fft = sinProd_matrix.fft(1);
+		printComplex(sinProd_fft);
+		System.out.println("-----------------------------------------");
+		System.out.println("PSD of sinProduct");
+		Matrix sinProd_psd = sinProd_matrix.psd();
+		System.out.println(sinProd_psd);
+		
 		
 
 	}
