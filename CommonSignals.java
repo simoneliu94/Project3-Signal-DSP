@@ -102,23 +102,111 @@ public class CommonSignals {
 		}
 	}
 	
-
+	public static void printComplex_real(Complex[] cList) {
+		for(int i = 0; i < cList.length; i++){
+			System.out.println(cList[i].re);
+		}
+	}
+	
+	public static Complex[] lowpass(Complex[] f_fft) {
+		Matrix lowpass = new Matrix(512,1);
+		for(int i = 0; i < lowpass.numRows; i++){
+			lowpass.complexMatrix[i] = new Complex(0,0);
+		}
+		for(int i = 0; i < 14; i++){
+			lowpass.complexMatrix[i] = new Complex(1,0);
+		}
+		for(int i = lowpass.numRows - 14; i < lowpass.numRows; i++){ //7 or 14
+			lowpass.complexMatrix[i] = new Complex(1,0);
+		}		
+		
+		for(int i = 0; i < lowpass.numRows; i ++){
+			lowpass.complexMatrix[i] = lowpass.complexMatrix[i].times(f_fft[i]);
+		}		
+		
+		return lowpass.fft(-1);
+	}
+	
+	public static Complex[] highpass(Complex[] f_fft) {
+		Matrix highpass = new Matrix(512,1);
+		for(int i = 0; i < highpass.numRows; i++){
+			highpass.complexMatrix[i] = new Complex(0,0);
+		}
+		for(int i = 0; i < 14; i++){
+			highpass.complexMatrix[i] = new Complex(0,0);
+		}
+		for(int i = highpass.numRows- 14; i < highpass.numRows; i++){
+			highpass.complexMatrix[i] = new Complex(0,0);
+		}
+		for(int i = 14; i<100; i++) {
+			highpass.complexMatrix[i] = new Complex(1,0);
+		}
+		for(int i = 100; i < highpass.numRows; i++){
+			highpass.complexMatrix[i] = new Complex(0,0);
+		}
+		for(int i=highpass.numRows-100; i<highpass.numRows-14; i++) {
+			highpass.complexMatrix[i] = new Complex(1,0);
+		}
+		
+		for(int i = 0; i < highpass.numRows; i ++){
+			highpass.complexMatrix[i] = highpass.complexMatrix[i].times(f_fft[i]);
+		}			
+		return highpass.fft(-1);
+	}
+	
+	public static Complex[] bandpass(Complex[] f_fft) {
+		Matrix bandpass = new Matrix(512,1);
+		for(int i = 0; i < bandpass.numRows; i++){
+			bandpass.complexMatrix[i] = new Complex(0,0);
+		}
+		for(int i = 0; i < bandpass.numRows; i++){//11,13,15,17
+			if (i==9 || i==11 ||i==13 ||i==15 ||i==497 ||i==499 ||i==501 ||i==503) {
+				bandpass.complexMatrix[i] = new Complex(1,0);
+			}			
+		}		
+		for(int i = 0; i < bandpass.numRows; i ++){
+			bandpass.complexMatrix[i] = bandpass.complexMatrix[i].times(f_fft[i]);
+		}			
+		return bandpass.fft(-1);
+	}
+	
+	public static Complex[] notchpass(Complex[] f_fft) {
+		Matrix notchpass = new Matrix(512,1);
+		for(int i = 0; i < notchpass.numRows; i++){
+			notchpass.complexMatrix[i] = new Complex(1,0);
+		}
+		for(int i = 0; i < notchpass.numRows; i++){//11,13,15,17
+			if (i==9 || i==11 ||i==13 ||i==15 ||i==497 ||i==499 ||i==501 ||i==503) {
+				notchpass.complexMatrix[i] = new Complex(0,0);
+			}			
+		}		
+		for(int i = 0; i < notchpass.numRows; i ++){
+			notchpass.complexMatrix[i] = notchpass.complexMatrix[i].times(f_fft[i]);
+		}			
+		return notchpass.fft(-1);
+	}
 
 	
 	public static void main(String[] args) throws IOException{
 		//Question1
 		//fs(3);
 		//fs(10);
-		//fs(50);
+		fs(50);
 		//gs(3);
 		//gs(10);
-		//gs(50);		
+		//gs(50);	
+		
+		//fs(7);
+		//System.out.println(fs(7));
+		
+		//System.out.println(fs(50).subtract(fs(8)).add(fs(4)));
+		
 		
 		//FFT of f50
-		/*Matrix f50 = new Matrix (fs(50));
-		Complex[] f50_fft = f50.fft(1);	
+		//Matrix f50 = new Matrix (fs(50));
+		//Complex[] f50_fft = f50.fft(1);	
 				
-		System.out.println("FFT of f50");
+		/*System.out.println("FFT of f50");
 		printComplex(f50_fft);
 		
 		//PSD of f50
@@ -177,7 +265,7 @@ public class CommonSignals {
 		System.out.println(sinSum_psd);*/
 		
 		
-		System.out.println("Product of 2 sin functions");
+		/*System.out.println("Product of 2 sin functions");
 		Matrix sinProd = new Matrix(1, "Resources/sinProduct.txt");		
 		Matrix sinProd_matrix = new Matrix (sinProd);
 		Complex[] sinProd_fft = sinProd_matrix.fft(1);
@@ -185,8 +273,13 @@ public class CommonSignals {
 		System.out.println("-----------------------------------------");
 		System.out.println("PSD of sinProduct");
 		Matrix sinProd_psd = sinProd_matrix.psd();
-		System.out.println(sinProd_psd);
+		System.out.println(sinProd_psd);*/
 		
+		//Question4
+		//printComplex_real(lowpass(f50_fft));
+		//printComplex_real(highpass(f50_fft));
+		//printComplex_real(bandpass(f50_fft));
+		//printComplex_real(notchpass(f50_fft));
 		
 
 	}
