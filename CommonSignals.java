@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CommonSignals {
@@ -25,8 +26,7 @@ public class CommonSignals {
 		}
 		//System.out.println(f);
 		return f;
-	}
-	
+	}	
 	
 	public static Matrix gs(int s){
 		Matrix g = new Matrix(SAMPLES, 1);
@@ -44,8 +44,7 @@ public class CommonSignals {
 			g.matrix[j+1][0] = g_total;
 			
 		}
-		return g;
-		
+		return g;		
 	}
 	
 	public static Matrix generate_FL(int s) {
@@ -94,6 +93,20 @@ public class CommonSignals {
 			g.matrix[i+1][0] = data;
 		}
 		return g;
+	}
+	
+	public static void phaseShift() {
+		double c = 0.1;
+		double product;
+		Matrix hT = new Matrix(512,1);
+		
+		for (int i = 0; i < SAMPLES; i++) {
+			double t = i * .001953125;
+			product = Math.sin(20 * Math.PI * (t - c));
+			
+			hT.complexMatrix[i] = new Complex((float) product, 0);
+		}
+		printComplex_real(hT.complexMatrix);
 	}
 	
 	public static void printComplex(Complex[] cList) {
@@ -186,7 +199,35 @@ public class CommonSignals {
 		return notchpass.fft(-1);
 	}
 
-	
+	public static void decode_DTMF() throws FileNotFoundException, IOException {
+		Matrix tA1 = new Matrix(1, "Resources/tonedataA1.txt");		
+		Matrix tB1 = new Matrix(1, "Resources/tonedataB1.txt");		
+		
+		Matrix toneA1 = new Matrix (tA1);
+		Matrix toneB1 = new Matrix (tB1);
+		
+		toneA1.fft(1);		
+		toneB1.fft(1);		
+			
+		Matrix toneA1_psd = toneA1.psd();		
+		Matrix toneB1_psd = toneB1.psd();	
+		
+		double N = 4096;
+		double fs = 44100;
+		ArrayList<Double> bin = new ArrayList<Double>();
+		
+		for(int k = 0; k<N; k++) {
+			bin.add((k*fs)/N);
+		}
+		for (int i=0; i<bin.size(); i++) {
+			//System.out.println(bin.get(i));
+		}
+		
+		//System.out.println(toneA1_psd);
+		System.out.println(toneB1_psd);
+
+	}
+
 	public static void main(String[] args) throws IOException{
 		//Question1
 		//fs(3);
@@ -264,6 +305,8 @@ public class CommonSignals {
 		Matrix sinSum_psd = sinSum_matrix.psd();
 		System.out.println(sinSum_psd);*/
 		
+		//Question3
+		//phaseShift();
 		
 		/*System.out.println("Product of 2 sin functions");
 		Matrix sinProd = new Matrix(1, "Resources/sinProduct.txt");		
@@ -280,6 +323,10 @@ public class CommonSignals {
 		//printComplex_real(highpass(f50_fft));
 		//printComplex_real(bandpass(f50_fft));
 		//printComplex_real(notchpass(f50_fft));
+		
+		//Question5
+		//decode_DTMF();
+		
 		
 
 	}
