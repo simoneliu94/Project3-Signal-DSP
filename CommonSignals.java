@@ -219,20 +219,81 @@ public class CommonSignals {
 		for(int k = 0; k<N; k++) {
 			bin.add((k*fs)/N);
 		}
+		System.out.println("Bin");
 		for (int i=0; i<bin.size(); i++) {
-			//System.out.println(bin.get(i));
+			System.out.println(bin.get(i));
 		}
 		
-		//System.out.println(toneA1_psd);
+		System.out.println("toneA1");
+		System.out.println(toneA1_psd);
+		System.out.println("toneB1");
 		System.out.println(toneB1_psd);
+	}
+	
+	public static void correlation() throws FileNotFoundException, IOException {
+		Matrix textPulse = new Matrix(1,"Resources/pulse.txt");
+		Matrix textSignal = new Matrix(1, "Resources/signalSamples.txt");
+		Matrix newPulse = new Matrix(1024,1);
+		
+		Matrix pulse = new Matrix (textPulse);
+		Matrix signal = new Matrix (textSignal);
+		
+		for(int i = 0; i < newPulse.numRows; i++){
+			newPulse.matrix[i][0] = 0;
+		}
+		
+		for(int i = 0; i < pulse.numRows; i++){
+			newPulse.matrix[i][0] = pulse.matrix[i][0];
+		}		
+		
+		newPulse.fft(1);
+		signal.fft(1);		
+				
+		for(int i = 0; i < pulse.numRows; i ++){
+			newPulse.complexMatrix[i] = signal.complexMatrix[i].times(newPulse.complexMatrix[i].conjugate());
+		}		
+		
+		newPulse.fft(-1);	
+		
+		for(int i = 0; i < newPulse.numRows; i++){
+			System.out.println(newPulse.complexMatrix[i].re);
+		}
+	}
+	
+	public static void convolution() throws FileNotFoundException, IOException {
+		Matrix textPulse = new Matrix(1, "Resources/signalSamples.txt");
+		Matrix pulse = new Matrix (textPulse);
+		Matrix convolution = new Matrix(pulse.numRows, 1);		
+		
+		int p = 6;
+		for(int i = 0; i < p; i ++){
+			convolution.matrix[i][0] = 0.1;
+		}
+		
+		for(int i = p; i > convolution.numRows; i ++){
+			convolution.matrix[i][0] = 0.0;
+		}
+		
+		pulse.fft(1);
+		convolution.fft(1);
+		
+		for(int i = 0; i < pulse.numRows; i++){
+			convolution.complexMatrix[i] = convolution.complexMatrix[i].times(pulse.complexMatrix[i]);
+		}		
+		
+		convolution.fft(-1);
 
+		System.out.println("Smoothed Signal");
+		for(int i = 0; i < convolution.numRows; i++){
+			System.out.println(convolution.complexMatrix[i].re);
+		}
 	}
 
 	public static void main(String[] args) throws IOException{
 		//Question1
 		//fs(3);
 		//fs(10);
-		fs(50);
+		//fs(50);
 		//gs(3);
 		//gs(10);
 		//gs(50);	
@@ -326,6 +387,13 @@ public class CommonSignals {
 		
 		//Question5
 		//decode_DTMF();
+		
+		//Question6
+		//correlation();
+		//convolution();
+		
+		//Question7
+		
 		
 		
 

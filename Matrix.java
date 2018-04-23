@@ -39,7 +39,7 @@ public class Matrix {
             {
                 this.matrix[i][j] = A.matrix[i][j];
             }
-        }   
+        }
     }
 /**
  * Represents a matrix in 2 dimensions
