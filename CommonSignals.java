@@ -246,10 +246,11 @@ public class CommonSignals {
 			newPulse.matrix[i][0] = pulse.matrix[i][0];
 		}		
 		
+		
 		newPulse.fft(1);
-		signal.fft(1);		
-				
-		for(int i = 0; i < pulse.numRows; i ++){
+		signal.fft(1);	
+		
+		for(int i = 0; i < newPulse.numRows; i ++){
 			newPulse.complexMatrix[i] = signal.complexMatrix[i].times(newPulse.complexMatrix[i].conjugate());
 		}		
 		
@@ -268,12 +269,12 @@ public class CommonSignals {
 		int p = 6;
 		for(int i = 0; i < p; i ++){
 			convolution.matrix[i][0] = 0.1;
-		}
+		}			
 		
 		for(int i = p; i > convolution.numRows; i ++){
 			convolution.matrix[i][0] = 0.0;
 		}
-		
+				
 		pulse.fft(1);
 		convolution.fft(1);
 		
@@ -390,7 +391,7 @@ public class CommonSignals {
 		
 		//Question6
 		//correlation();
-		//convolution();
+		convolution();
 		
 		//Question7
 		
