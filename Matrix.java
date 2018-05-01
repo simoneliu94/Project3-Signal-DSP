@@ -27,6 +27,7 @@ public class Matrix {
     public Matrix() {
     	
     }
+
     
     public Matrix (Matrix A) {
     	this.numRows = A.matrix.length;
@@ -85,9 +86,7 @@ public class Matrix {
 		}
 		
 		this.numRows = fileRows - 1;
-		
-		//cmatrix = new Complex[this.rows];
-		
+				
 		this.matrix = new double[numRows][numCols];
 		
 		FileReader is = new FileReader(filepath);

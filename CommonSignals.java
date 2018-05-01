@@ -394,11 +394,9 @@ public class CommonSignals {
 		//convolution();
 		
 		//Question7
-		TwoD_FFT.testSignal();
-		TwoD_FFT.testPulse();
-		
-		
-		
+		//TwoD_FFT.testSignal();
+		//TwoD_FFT.testPulse();
+		//TwoD_FFT.correlation2D();		
 
 	}
 }
